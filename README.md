@@ -1,3 +1,27 @@
+Steps and Process
+
+1. Installing minikube - setting the context of kubectl to include minikube
+
+2. Creating the DB - it needs a pvc to store data across containers, needs a service to recieve traffic, and a secrets to load env default admin credentials from env variables
+3. Opportunity for improvement: db secrets are plain text, use a secure secret manager integration for secure deployment
+
+4. Creating the backend - flask python app (AI generated) with a health and db check endpoint
+5. dockerfile to create the app image - start with a slim python image and use pip to install dependencies, then add a health check (redundant since kubernetes health checks are independent, but still helped verify that the dockerfile was accurate), then the cmd to start the backend service. 
+6. Adding backend to Minikube node - create a deployment to tell minikube how to configure the backend pods (how many pods + env variables etc + health checks)
+6.1 Issue where couldn't find the image file that was built, I'm not exactly sure what the issue was, but building it and adding it to minikube then setting imagePullPolicy = never fixed it
+6.2 added a backend service config to let the backend app recieve traffic within the node
+
+7. Creating the front end (AI generated nginx webpage), html to display a webpage, nginx to serve the webpage and proxy the backend(i am not too famaliar with this). By the project reqs, using a configmap to load the files as data, but a better approach might be to use makefiles to create images with the scripts loaded into them?
+
+Notes: the backend check: test-backend had a crashloopbackoff status, this is because I was testing that it worked. It's not part of the final web app
+
+---
+
+Assignment Description 
+        |
+        V
+---
+
 Kubernetes Assignment: Deploy a Multi-Tier Web Application
 
 ---
